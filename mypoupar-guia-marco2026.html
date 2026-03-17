@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyPoupar+ · Guia de Poupança Março 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #F0D07A;
+            --gold-dark: #8B6914;
+            --dark: #0A0A0F;
+            --dark-2: #12121A;
+            --dark-3: #1C1C2E;
+            --surface: #1E1E2E;
+            --surface-2: #252538;
+            --green: #00C897;
+            --green-dim: rgba(0,200,151,0.15);
+            --red: #FF4757;
+            --red-dim: rgba(255,71,87,0.12);
+            --text: #E8E8F0;
+            --text-dim: #8888A0;
+            --border: rgba(255,255,255,0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--text); overflow: hidden; height: 100vh; }
+        h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
+
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(10,10,15,0.92); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem; height: 64px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 0.75rem; }
+        .nav-logo {
+            width: 38px; height: 38px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--dark);
+        }
+        .nav-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.2rem; }
+        .nav-badge {
+            background: rgba(201,168,76,0.15); color: var(--gold);
+            border: 1px solid rgba(201,168,76,0.3);
+            padding: 0.25rem 0.75rem; border-radius: 100px;
+            font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em;
+        }
+        .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+        .slide-counter { font-family: 'Syne', sans-serif; font-size: 0.85rem; color: var(--text-dim); }
+        .slide-counter span { color: var(--gold); font-weight: 700; }
+        .dots-row { display: flex; gap: 6px; align-items: center; }
+        .dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--surface-2); border: 1px solid var(--border);
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .dot.active { background: var(--gold); border-color: var(--gold); width: 20px; border-radius: 3px; }
+        .dot:hover:not(.active) { background: var(--text-dim); }
+
+        .progress-wrap { position: fixed; top: 64px; left: 0; right: 0; height: 2px; background: var(--surface); z-index: 99; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dark), var(--gold)); transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+        .nav-arrow {
+            position: fixed; top: 50%; transform: translateY(-50%); z-index: 90;
+            width: 48px; height: 48px; border-radius: 50%;
+            background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.25);
+            color: var(--gold); font-size: 1.1rem;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s ease; backdrop-filter: blur(10px);
+        }
+        .nav-arrow:hover { background: rgba(201,168,76,0.25); border-color: var(--gold); transform: translateY(-50%) scale(1.1); }
+        .nav-arrow:active { transform: translateY(-50%) scale(0.95); }
+        .nav-arrow.prev { left: 1.25rem; }
+        .nav-arrow.next { right: 1.25rem; }
+        .nav-arrow.hidden { opacity: 0; pointer-events: none; }
+
+        .slide { position: fixed; inset: 66px 0 0 0; display: none; overflow-y: auto; overflow-x: hidden; }
+        .slide.active { display: block; animation: slideIn 0.45s cubic-bezier(0.4,0,0.2,1); }
+        @keyframes slideIn { from { opacity:0; transform:translateX(24px); } to { opacity:1; transform:translateX(0); } }
+
+        .slide-inner {
+            min-height: calc(100vh - 66px); padding: 3rem 2rem 4rem;
+            max-width: 1200px; margin: 0 auto;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+
+        .section-label {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em;
+            text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem;
+        }
+        .section-label::before { content:''; display:inline-block; width:24px; height:1px; background:var(--gold); }
+        .slide-title { font-size: clamp(1.8rem,4.5vw,3.2rem); font-weight: 800; line-height: 1.1; margin-bottom: 0.6rem; }
+        .slide-sub { font-size: 1rem; color: var(--text-dim); font-weight: 300; margin-bottom: 2rem; }
+
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+        }
+        .card:hover { border-color: rgba(201,168,76,0.25); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
+        .card-gold { border-color: rgba(201,168,76,0.25); background: linear-gradient(135deg,var(--surface),rgba(201,168,76,0.05)); }
+        .card-green { border-color: rgba(0,200,151,0.2); background: rgba(0,200,151,0.05); }
+        .card-red { border-color: rgba(255,71,87,0.2); background: var(--red-dim); }
+
+        .badge { display:inline-block; padding:0.2rem 0.65rem; border-radius:100px; font-size:0.7rem; font-weight:600; letter-spacing:0.05em; }
+        .badge-gold  { background:rgba(201,168,76,0.15); color:var(--gold); border:1px solid rgba(201,168,76,0.3); }
+        .badge-green { background:var(--green-dim); color:var(--green); border:1px solid rgba(0,200,151,0.3); }
+        .badge-red   { background:var(--red-dim); color:var(--red); border:1px solid rgba(255,71,87,0.25); }
+        .badge-dim   { background:var(--surface-2); color:var(--text-dim); border:1px solid var(--border); }
+
+        .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+        .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; }
+        .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+        @media(max-width:900px) { .grid-4,.grid-3 { grid-template-columns:1fr 1fr; } }
+        @media(max-width:640px) { .grid-2,.grid-3,.grid-4 { grid-template-columns:1fr; } .slide-inner { padding:2rem 1.25rem 3rem; } }
+
+        .big-num { font-family:'Syne',sans-serif; font-weight:800; line-height:1; }
+        .big-num.gold  { color:var(--gold); }
+        .big-num.green { color:var(--green); }
+        .big-num.red   { color:var(--red); }
+
+        .data-table { width:100%; border-collapse:collapse; }
+        .data-table th { text-align:left; padding:0.85rem 1rem; font-size:0.7rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); border-bottom:1px solid var(--border); }
+        .data-table td { padding:0.85rem 1rem; border-bottom:1px solid var(--border); font-size:0.875rem; vertical-align:middle; }
+        .data-table tr:last-child td { border-bottom:none; }
+        .data-table tr:hover td { background:rgba(201,168,76,0.03); }
+
+        .stat-row { display:flex; justify-content:space-between; align-items:center; padding:0.7rem 0; border-bottom:1px solid var(--border); }
+        .stat-row:last-child { border-bottom:none; }
+        .stat-label { color:var(--text-dim); font-size:0.875rem; }
+
+        .step { display:flex; gap:1.25rem; align-items:flex-start; }
+        .step-num {
+            flex-shrink:0; width:36px; height:36px; border-radius:50%;
+            background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+            color:var(--dark); font-family:'Syne',sans-serif; font-weight:800; font-size:0.9rem;
+            display:flex; align-items:center; justify-content:center;
+        }
+        .sep { height:1px; background:var(--border); margin:1.25rem 0; }
+
+        .medal { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; font-size:0.85rem; flex-shrink:0; }
+        .medal-1 { background:linear-gradient(135deg,#C9A84C,#8B6914); color:var(--dark); }
+        .medal-2 { background:linear-gradient(135deg,#9EA8B0,#5C6970); color:var(--dark); }
+        .medal-3 { background:linear-gradient(135deg,#C46F3A,#7A3F1A); color:var(--dark); }
+
+        .price-big { font-family:'Syne',sans-serif; font-weight:800; color:var(--gold); line-height:1; }
+        .price-big .amount { font-size:2.5rem; }
+        .price-big .unit   { font-size:1rem; color:var(--text-dim); font-weight:400; }
+
+        .highlight {
+            background:linear-gradient(135deg,rgba(201,168,76,0.1),rgba(201,168,76,0.04));
+            border:1px solid rgba(201,168,76,0.25); border-radius:16px; padding:1.5rem 2rem;
+        }
+
+        .sub-card {
+            background:linear-gradient(135deg,var(--surface),var(--dark-3));
+            border:1px solid rgba(201,168,76,0.3); border-radius:20px; padding:2.5rem;
+            position:relative; overflow:hidden;
+        }
+        .sub-card::before {
+            content:''; position:absolute; top:-80px; right:-80px;
+            width:200px; height:200px;
+            background:radial-gradient(circle,rgba(201,168,76,0.12),transparent 70%);
+            pointer-events:none;
+        }
+
+        .check-list { list-style:none; }
+        .check-list li { display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; font-size:0.875rem; border-bottom:1px solid var(--border); }
+        .check-list li:last-child { border-bottom:none; }
+        .check-list li::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; }
+
+        /* Hero */
+        .hero-glyph {
+            font-size:6rem; line-height:1;
+            background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+            margin-bottom:1.25rem; display:inline-block; animation:floatG 4s ease-in-out infinite;
+        }
+        @keyframes floatG { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        .hero-title {
+            font-size:clamp(2.5rem,7vw,5.5rem); font-weight:800; line-height:0.95;
+            background:linear-gradient(180deg,var(--text) 0%,rgba(232,232,240,0.45) 100%);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+            margin-bottom:0.75rem;
+        }
+        .hero-divider { width:60px; height:2px; background:linear-gradient(90deg,var(--gold),transparent); margin:1.25rem auto; }
+        .hero-pills { display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap; margin-bottom:2.5rem; }
+        .hero-pill {
+            background:var(--surface); border:1px solid var(--border);
+            border-radius:100px; padding:0.5rem 1.1rem;
+            display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; font-weight:500;
+        }
+        .hero-pill i { color:var(--gold); }
+
+        /* CTA Button */
+        .cta-btn {
+            display:inline-flex; align-items:center; gap:0.75rem;
+            background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+            color:var(--dark); font-family:'Syne',sans-serif; font-weight:700; font-size:1rem;
+            padding:1rem 2.5rem; border-radius:100px; border:none;
+            cursor:pointer; transition:all 0.3s ease; letter-spacing:0.03em; text-decoration:none;
+        }
+        .cta-btn:hover { transform:scale(1.05); box-shadow:0 8px 30px rgba(201,168,76,0.4); }
+        @keyframes pulse-gold { 0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0.4)} 50%{box-shadow:0 0 0 12px rgba(201,168,76,0)} }
+        .pulse { animation:pulse-gold 2.5s ease-in-out infinite; }
+
+        .fs-btn { background:none; border:1px solid var(--border); color:var(--text-dim); width:34px; height:34px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.85rem; transition:all 0.2s; }
+        .fs-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+        .slide::-webkit-scrollbar { width:4px; }
+        .slide::-webkit-scrollbar-track { background:transparent; }
+        .slide::-webkit-scrollbar-thumb { background:var(--surface-2); border-radius:2px; }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="nav-brand">
+        <div class="nav-logo">M</div>
+        <span class="nav-title">MyPoupar+</span>
+        <span class="nav-badge">MARÇO 2026</span>
+    </div>
+    <div class="nav-right">
+        <div class="dots-row" id="dots-row"></div>
+        <span class="slide-counter"><span id="current-num">1</span>&thinsp;/&thinsp;10</span>
+        <button class="fs-btn" onclick="toggleFullscreen()"><i class="fas fa-expand" id="fs-icon"></i></button>
+    </div>
+</nav>
+<div class="progress-wrap"><div class="progress-fill" id="progress" style="width:10%"></div></div>
+<button class="nav-arrow prev hidden" id="btn-prev" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+<button class="nav-arrow next" id="btn-next" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+
+<!-- ═══ SLIDE 1 ═══ -->
+<div class="slide active" id="slide-1">
+    <div class="slide-inner" style="align-items:center;text-align:center;padding-top:4rem">
+        <div class="hero-glyph">₿</div>
+        <h1 class="hero-title">MyPoupar+</h1>
+        <div class="hero-divider"></div>
+        <p style="font-size:1.1rem;color:var(--text-dim);margin-bottom:2.5rem">Guia de Poupança · Edição Especial Sócio+ · Março 2026</p>
+        <div class="hero-pills">
+            <div class="hero-pill"><i class="fas fa-bolt"></i> Energia 2026</div>
+            <div class="hero-pill"><i class="fas fa-wifi"></i> DIGI vs Big 3</div>
+            <div class="hero-pill"><i class="fas fa-gas-pump"></i> Combustível</div>
+            <div class="hero-pill"><i class="fas fa-piggy-bank"></i> Até 1.364€/ano</div>
+        </div>
+        <button class="cta-btn pulse" onclick="nextSlide()">Começar a Poupar <i class="fas fa-arrow-right"></i></button>
+        <div style="margin-top:3rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:560px;width:100%">
+            <div style="text-align:center">
+                <div class="big-num gold" style="font-size:2rem">10</div>
+                <div style="font-size:0.75rem;color:var(--text-dim);margin-top:0.2rem">Slides</div>
+            </div>
+            <div style="text-align:center">
+                <div class="big-num gold" style="font-size:2rem">6</div>
+                <div style="font-size:0.75rem;color:var(--text-dim);margin-top:0.2rem">Categorias</div>
+            </div>
+            <div style="text-align:center">
+                <div class="big-num gold" style="font-size:2rem">€600+</div>
+                <div style="font-size:0.75rem;color:var(--text-dim);margin-top:0.2rem">Poupança média</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 2 ═══ -->
+<div class="slide" id="slide-2">
+    <div class="slide-inner">
+        <div class="section-label">O Problema</div>
+        <h2 class="slide-title">Está a Pagar Demais<br>e Nem Sabe</h2>
+        <p class="slide-sub">O custo da inércia é real — veja os números</p>
+        <div class="grid-2" style="align-items:start">
+            <div style="display:flex;flex-direction:column;gap:1rem">
+                <div class="card card-red">
+                    <div class="badge badge-red" style="margin-bottom:0.75rem"><i class="fas fa-chart-line" style="margin-right:4px"></i> INFLAÇÃO 2026</div>
+                    <p style="font-size:0.875rem;line-height:1.65">MEO, NOS e Vodafone aumentaram entre <strong style="color:var(--red)">2,1% e 2,2%</strong>. Num pacote de 50€/mês são mais <strong style="color:var(--red)">+13€/ano</strong> sem aviso.</p>
+                </div>
+                <div class="card" style="border-color:rgba(255,165,0,0.2);background:rgba(255,165,0,0.05)">
+                    <div class="badge" style="background:rgba(255,165,0,0.15);color:#FFA500;border:1px solid rgba(255,165,0,0.3);margin-bottom:0.75rem">A ARMADILHA DA INÉRCIA</div>
+                    <p style="font-size:0.875rem;line-height:1.65">Fidelizações escondidas, campanhas que variam de zona para zona, letras miúdas. A operadora cobra mais porque <strong style="color:#FFA500">nunca mudou</strong>.</p>
+                </div>
+                <div class="card card-gold">
+                    <div class="badge badge-gold" style="margin-bottom:0.75rem"><i class="fas fa-gas-pump" style="margin-right:4px"></i> COMBUSTÍVEL</div>
+                    <p style="font-size:0.875rem;line-height:1.65">Instabilidade global afeta Portugal. Mas existe forma de poupar até <strong style="color:var(--gold)">30 cêntimos/litro</strong> com apps e cartões.</p>
+                </div>
+            </div>
+            <div class="card" style="padding:0;overflow:hidden">
+                <div style="background:linear-gradient(135deg,var(--gold),var(--gold-dark));padding:1.25rem 1.5rem">
+                    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--dark)">O Custo da Inércia</div>
+                </div>
+                <div style="padding:1.25rem 1.5rem">
+                    <div class="stat-row"><span class="stat-label">Taxa de inflação 2026</span><span style="color:var(--red);font-weight:700">2,1% – 2,2%</span></div>
+                    <div class="stat-row"><span class="stat-label">Aumento médio telecom</span><span style="color:var(--red);font-weight:700">+1,10€/mês</span></div>
+                    <div class="stat-row"><span class="stat-label">Impacto anual (50€/mês)</span><span style="color:var(--red);font-weight:700">+13,20€</span></div>
+                    <div class="stat-row"><span class="stat-label">Famílias que podem poupar</span><span style="color:var(--green);font-weight:700">85%</span></div>
+                    <div class="stat-row"><span class="stat-label">Poupança anual perdida</span><span style="color:var(--green);font-weight:700">600€+</span></div>
+                </div>
+                <div style="background:rgba(255,71,87,0.1);border-top:1px solid rgba(255,71,87,0.2);padding:1.5rem;text-align:center">
+                    <div class="big-num red" style="font-size:3rem">€600+</div>
+                    <div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.25rem">poupança anual perdida</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 3 ═══ -->
+<div class="slide" id="slide-3">
+    <div class="slide-inner">
+        <div class="section-label">Telecomunicações</div>
+        <h2 class="slide-title">A Guerra dos Preços</h2>
+        <p class="slide-sub">DIGI mantém preços enquanto a concorrência aumenta — Março 2026</p>
+        <div class="grid-2" style="margin-bottom:1.25rem">
+            <div class="card card-green" style="padding:0;overflow:hidden">
+                <div style="background:linear-gradient(135deg,var(--green),#00a67e);padding:1rem 1.5rem;display:flex;align-items:center;gap:0.75rem">
+                    <i class="fas fa-trophy" style="color:var(--dark)"></i>
+                    <span style="font-family:'Syne',sans-serif;font-weight:800;color:var(--dark)">Vencedor · DIGI</span>
+                    <span style="margin-left:auto;background:rgba(0,0,0,0.2);color:var(--dark);padding:0.2rem 0.65rem;border-radius:100px;font-size:0.7rem;font-weight:700">SEM AUMENTOS</span>
+                </div>
+                <div style="padding:1.25rem 1.5rem">
+                    <div class="stat-row"><span class="stat-label">Net Fixa 1Gbps</span><span style="color:var(--green);font-weight:700">10€/mês</span></div>
+                    <div class="stat-row"><span class="stat-label">Net + TV (75 canais)</span><span style="color:var(--green);font-weight:700">22€/mês</span></div>
+                    <div class="stat-row"><span class="stat-label">Net + TV + 1 Móvel (100GB)</span><span style="color:var(--green);font-weight:700">25€/mês</span></div>
+                    <div class="stat-row"><span class="stat-label">Net + TV + 2 Móveis</span><span style="color:var(--green);font-weight:700">29€/mês</span></div>
+                </div>
+            </div>
+            <div class="card card-red" style="padding:0;overflow:hidden">
+                <div style="background:linear-gradient(135deg,var(--red),#cc2233);padding:1rem 1.5rem;display:flex;align-items:center;gap:0.75rem">
+                    <i class="fas fa-arrow-up" style="color:white"></i>
+                    <span style="font-family:'Syne',sans-serif;font-weight:800;color:white">As Três Grandes — Aumentos 2026</span>
+                </div>
+                <div style="padding:1.25rem 1.5rem">
+                    <div class="stat-row"><span class="stat-label">MEO Net 1Gbps</span><span style="color:var(--red);font-weight:700">29,99€ <s style="color:var(--text-dim);font-size:0.8rem">27,99€</s></span></div>
+                    <div class="stat-row"><span class="stat-label">NOS Net 1Gbps</span><span style="color:var(--red);font-weight:700">30,00€ <s style="color:var(--text-dim);font-size:0.8rem">28,00€</s></span></div>
+                    <div class="stat-row"><span class="stat-label">Vodafone Net 1Gbps</span><span style="color:var(--red);font-weight:700">31,00€ <s style="color:var(--text-dim);font-size:0.8rem">28,00€</s></span></div>
+                    <div class="stat-row"><span class="stat-label">Pacotes 3P (Net+TV+Móvel)</span><span style="color:var(--red);font-weight:700">60€ – 66€</span></div>
+                </div>
+                <div style="padding:0.75rem 1.5rem;border-top:1px solid var(--border);font-size:0.75rem;color:var(--text-dim)">* Aumentos de 2,1% a 2,2% aplicados em jan/fev 2026</div>
+            </div>
+        </div>
+        <div class="highlight">
+            <div style="display:flex;align-items:flex-start;gap:1rem">
+                <div style="font-size:1.5rem">💡</div>
+                <div>
+                    <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.4rem">Dica MyPoupar+ Exclusiva</div>
+                    <p style="font-size:0.875rem;color:var(--text);line-height:1.6">As submarcas <strong style="color:var(--gold)">Uzo (MEO)</strong>, <strong style="color:var(--gold)">Woo (NOS)</strong> e <strong style="color:var(--gold)">Amigo (Vodafone)</strong> mantêm preços estáveis em 2026! Net 1Gbps + TV por <strong style="color:var(--gold)">22€/mês</strong> com apenas <strong>3 meses de fidelização</strong> vs 24 meses das grandes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 4 ═══ -->
+<div class="slide" id="slide-4">
+    <div class="slide-inner">
+        <div class="section-label">Energia</div>
+        <h2 class="slide-title">Eletricidade &amp; Gás</h2>
+        <p class="slide-sub">Melhores tarifas do mercado — Março 2026</p>
+        <div class="grid-3" style="margin-bottom:1.5rem">
+            <div class="card" style="padding:0;overflow:hidden">
+                <div style="background:linear-gradient(135deg,#3a7d44,#1e5e29);padding:1rem 1.25rem;display:flex;align-items:center;gap:0.75rem">
+                    <div class="medal medal-2">#2</div>
+                    <div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem">G9 Energy</div><div style="font-size:0.7rem;opacity:0.8">VANTAGEM+ Luz</div></div>
+                </div>
+                <div style="padding:1.25rem">
+                    <div class="price-big"><span class="amount">0,1348€</span><span class="unit">/kWh</span></div>
+                    <div style="font-size:0.78rem;color:var(--green);margin:0.25rem 0 1rem">Preço fixo garantido</div>
+                    <ul class="check-list" style="font-size:0.8rem"><li>Sem fidelização obrigatória</li><li>Poupança até 89€/ano</li><li>Preço fixo 12 meses</li></ul>
+                </div>
+            </div>
+            <div class="card card-gold" style="padding:0;overflow:hidden;border-width:2px">
+                <div style="background:linear-gradient(135deg,var(--gold),var(--gold-dark));padding:1rem 1.25rem;display:flex;align-items:center;gap:0.75rem">
+                    <div class="medal medal-1">#1</div>
+                    <div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:var(--dark)">Endesa Digital</div><div style="font-size:0.7rem;color:var(--dark-2)">e-Luz</div></div>
+                    <span style="margin-left:auto;background:var(--dark);color:var(--gold);padding:0.2rem 0.6rem;border-radius:100px;font-size:0.65rem;font-weight:700">RECOMENDADO</span>
+                </div>
+                <div style="padding:1.25rem">
+                    <div class="price-big"><span class="amount">0,1291€</span><span class="unit">/kWh</span></div>
+                    <div style="font-size:0.78rem;color:var(--gold);margin:0.25rem 0 1rem">Menor preço kWh do mercado!</div>
+                    <ul class="check-list" style="font-size:0.8rem"><li>Desconto até 27% na fatura</li><li>-12€/ano com Plano Amigo</li><li>100% digital, sem papelada</li></ul>
+                </div>
+            </div>
+            <div class="card" style="padding:0;overflow:hidden">
+                <div style="background:linear-gradient(135deg,#6b4f9c,#3e2a6e);padding:1rem 1.25rem;display:flex;align-items:center;gap:0.75rem">
+                    <div class="medal medal-3">#3</div>
+                    <div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem">Goldenergy</div><div style="font-size:0.7rem;opacity:0.8">Monoelétrico ACP</div></div>
+                </div>
+                <div style="padding:1.25rem">
+                    <div class="price-big"><span class="amount">0,1399€</span><span class="unit">/kWh</span></div>
+                    <div style="font-size:0.78rem;color:var(--text-dim);margin:0.25rem 0 1rem">Boa relação qualidade/preço</div>
+                    <ul class="check-list" style="font-size:0.8rem"><li>Até 12% de desconto</li><li>Termo fixo gás gratuito</li><li>Painéis solares sem juros</li></ul>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem">
+                <i class="fas fa-fire" style="color:#FF7300;font-size:1.1rem"></i>
+                <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem">Gás Natural — Top 3 Março 2026</h3>
+            </div>
+            <div class="grid-3">
+                <div style="text-align:center;padding:1rem;background:var(--surface-2);border-radius:12px">
+                    <div style="font-size:0.8rem;color:var(--text-dim);margin-bottom:0.4rem">Galp Regulada Gás</div>
+                    <div class="big-num gold" style="font-size:1.8rem">20,30€</div>
+                    <div style="font-size:0.7rem;color:var(--text-dim)">Escalão 2 · 3400kWh/ano</div>
+                </div>
+                <div style="text-align:center;padding:1rem;background:var(--surface-2);border-radius:12px">
+                    <div style="font-size:0.8rem;color:var(--text-dim);margin-bottom:0.4rem">Luzigás Plano Gás</div>
+                    <div class="big-num" style="font-size:1.8rem;color:var(--text-dim)">26,00€</div>
+                    <div style="font-size:0.7rem;color:var(--text-dim)">Escalão 2</div>
+                </div>
+                <div style="text-align:center;padding:1rem;background:var(--surface-2);border-radius:12px">
+                    <div style="font-size:0.8rem;color:var(--text-dim);margin-bottom:0.4rem">Endesa Digital Gás</div>
+                    <div class="big-num" style="font-size:1.8rem;color:var(--text-dim)">27,72€</div>
+                    <div style="font-size:0.7rem;color:var(--text-dim)">Com descontos digitais</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 5 ═══ -->
+<div class="slide" id="slide-5">
+    <div class="slide-inner">
+        <div class="section-label">Combustível — Exclusivo Sócio+</div>
+        <h2 class="slide-title">Poupe até 30 cêntimos/litro</h2>
+        <p class="slide-sub">Guia completo de apps e cartões de desconto · Março 2026</p>
+        <div class="grid-4" style="margin-bottom:1.5rem">
+            <div class="card" style="padding:1.25rem">
+                <div style="display:flex;gap:0.5rem;margin-bottom:1rem">
+                    <div style="width:36px;height:36px;border-radius:50%;background:#E31E24;display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:0.8rem">R</div>
+                    <div style="width:36px;height:36px;border-radius:50%;background:#FFD900;display:flex;align-items:center;justify-content:center;font-weight:800;color:#E31E24;font-size:0.8rem">L</div>
+                </div>
+                <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:0.9rem">Repsol + Lidl Plus</div>
+                <div class="big-num red" style="font-size:2rem;margin-bottom:0.75rem">0,10€<span style="font-size:0.85rem;color:var(--text-dim)">/L</span></div>
+                <ul style="list-style:none;font-size:0.78rem;color:var(--text-dim);line-height:2"><li>• 0,06€ desconto imediato</li><li>• 0,04€ saldo MyRepsol</li><li>• Cupão 3€ Lidl (30€ abast.)</li><li>• Válido até 31/12/2026</li></ul>
+                <div style="margin-top:0.75rem;background:var(--red-dim);border:1px solid rgba(255,71,87,0.2);border-radius:8px;padding:0.5rem;text-align:center;font-size:0.7rem;color:var(--red);font-weight:600">Código: LIDL4</div>
+            </div>
+            <div class="card card-gold" style="padding:1.25rem">
+                <div style="display:flex;gap:0.5rem;margin-bottom:1rem">
+                    <div style="width:36px;height:36px;border-radius:50%;background:#FF6400;display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:0.8rem">G</div>
+                    <div style="width:36px;height:36px;border-radius:50%;background:#E31E24;display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:0.8rem">C</div>
+                </div>
+                <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:0.9rem">Galp + Continente</div>
+                <div class="big-num gold" style="font-size:2rem;margin-bottom:0.75rem">0,30€<span style="font-size:0.85rem;color:var(--text-dim)">/L</span></div>
+                <ul style="list-style:none;font-size:0.78rem;color:var(--text-dim);line-height:2"><li>• Até 30 cêntimos/litro</li><li>• 10% desconto Continente</li><li>• Saldo acumulado CC</li><li>• Máx 7000L/ano</li></ul>
+                <div style="margin-top:0.75rem;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:8px;padding:0.5rem;text-align:center;font-size:0.7rem;color:var(--gold);font-weight:600">App Mundo Galp necessária</div>
+            </div>
+            <div class="card card-green" style="padding:1.25rem">
+                <div style="display:flex;gap:0.5rem;margin-bottom:1rem">
+                    <div style="width:36px;height:36px;border-radius:50%;background:#006400;display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:0.65rem">BP</div>
+                    <div style="width:36px;height:36px;border-radius:50%;background:#4CAF50;display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:0.7rem">PD</div>
+                </div>
+                <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:0.9rem">BP + Pingo Doce</div>
+                <div class="big-num green" style="font-size:2rem;margin-bottom:0.75rem">0,20€<span style="font-size:0.85rem;color:var(--text-dim)">/L</span></div>
+                <ul style="list-style:none;font-size:0.78rem;color:var(--text-dim);line-height:2"><li>• 20 cêntimos/litro imediato</li><li>• 2€ saldo/40€ compras PD</li><li>• Até 20€ desconto/dia</li><li>• 25% poupança máxima</li></ul>
+                <div style="margin-top:0.75rem;background:var(--green-dim);border:1px solid rgba(0,200,151,0.3);border-radius:8px;padding:0.5rem;text-align:center;font-size:0.7rem;color:var(--green);font-weight:600">Cartão Poupa Mais necessário</div>
+            </div>
+            <div class="card" style="padding:1.25rem">
+                <div style="margin-bottom:1rem"><div style="width:36px;height:36px;border-radius:50%;background:#E31E24;display:flex;align-items:center;justify-content:center;color:white;font-size:0.9rem"><i class="fas fa-mobile-alt"></i></div></div>
+                <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:0.9rem">MyRepsol App</div>
+                <div class="big-num red" style="font-size:2rem;margin-bottom:0.75rem">0,20€<span style="font-size:0.85rem;color:var(--text-dim)">/L</span></div>
+                <ul style="list-style:none;font-size:0.78rem;color:var(--text-dim);line-height:2"><li>• Combustível + Luz + Gás</li><li>• Descontos Glovo, Bolt</li><li>• 60€ por recomendar</li><li>• Acumulação máxima</li></ul>
+                <div style="margin-top:0.75rem;background:var(--red-dim);border:1px solid rgba(255,71,87,0.2);border-radius:8px;padding:0.5rem;text-align:center;font-size:0.7rem;color:var(--red);font-weight:600">Saldo em todas as energias</div>
+            </div>
+        </div>
+        <div class="card" style="padding:1.5rem">
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem">
+                <i class="fas fa-calculator" style="color:var(--gold)"></i>
+                <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem">Simulação — Depósito 50L · Gasolina 95 a 1,70€/L</h3>
+            </div>
+            <div class="grid-4">
+                <div style="text-align:center;padding:1rem;background:var(--surface-2);border-radius:12px"><div style="font-size:0.75rem;color:var(--text-dim);margin-bottom:0.4rem">Sem descontos</div><div class="big-num" style="font-size:1.8rem;color:var(--text-dim)">85,00€</div></div>
+                <div style="text-align:center;padding:1rem;background:var(--red-dim);border:1px solid rgba(255,71,87,0.2);border-radius:12px"><div style="font-size:0.75rem;color:var(--red);margin-bottom:0.4rem">Lidl + Repsol</div><div class="big-num red" style="font-size:1.8rem">80,00€</div><div style="font-size:0.7rem;color:var(--text-dim)">Poupa 5€</div></div>
+                <div style="text-align:center;padding:1rem;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);border-radius:12px"><div style="font-size:0.75rem;color:var(--gold);margin-bottom:0.4rem">Galp + Continente ⭐</div><div class="big-num gold" style="font-size:1.8rem">70,00€</div><div style="font-size:0.7rem;color:var(--text-dim)">Poupa 15€</div></div>
+                <div style="text-align:center;padding:1rem;background:var(--green-dim);border:1px solid rgba(0,200,151,0.25);border-radius:12px"><div style="font-size:0.75rem;color:var(--green);margin-bottom:0.4rem">BP + Pingo Doce</div><div class="big-num green" style="font-size:1.8rem">75,00€</div><div style="font-size:0.7rem;color:var(--text-dim)">Poupa 10€</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 6 ═══ -->
+<div class="slide" id="slide-6">
+    <div class="slide-inner">
+        <div class="section-label">Estratégia Sócio+</div>
+        <h2 class="slide-title">A Combinação Perfeita</h2>
+        <p class="slide-sub">Plano de ação para maximizar a poupança — Março 2026</p>
+        <div class="card" style="padding:2rem;margin-bottom:1.25rem">
+            <div style="display:flex;flex-direction:column;gap:1.25rem">
+                <div class="step"><div class="step-num">1</div><div style="flex:1"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.4rem">Energia: Endesa Digital ou G9 Energy</div><p style="font-size:0.875rem;color:var(--text-dim);line-height:1.6">Poupança imediata de <strong style="color:var(--text)">20–40€/mês</strong> vs EDP/Galp. Sem fidelização, preço fixo 12 meses.</p><div style="display:flex;gap:0.5rem;margin-top:0.6rem"><span class="badge badge-gold">0,1291€/kWh</span><span class="badge badge-green">Poupa 240€/ano</span></div></div></div>
+                <div class="sep"></div>
+                <div class="step"><div class="step-num">2</div><div style="flex:1"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.4rem">Telecom: DIGI ou Submarcas (Uzo / Woo / Amigo)</div><p style="font-size:0.875rem;color:var(--text-dim);line-height:1.6">Evite os aumentos de 2026. DIGI oferece <strong style="color:var(--text)">1Gbps + TV por 22€</strong> sem fidelização de 24 meses.</p><div style="display:flex;gap:0.5rem;margin-top:0.6rem"><span class="badge badge-gold">22€/mês</span><span class="badge badge-green">vs 45–66€ concorrência</span></div></div></div>
+                <div class="sep"></div>
+                <div class="step"><div class="step-num">3</div><div style="flex:1"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.4rem">Combustível: Galp + Continente ou BP + Pingo Doce</div><p style="font-size:0.875rem;color:var(--text-dim);line-height:1.6">Se faz compras no Continente, <strong style="color:var(--text)">Galp oferece 30c€/L</strong>. Se prefere Pingo Doce, BP dá 20c€/L + saldo.</p><div style="display:flex;gap:0.5rem;margin-top:0.6rem"><span class="badge badge-gold">Até 30c€/L</span><span class="badge badge-green">Poupa 15€/depósito</span></div></div></div>
+                <div class="sep"></div>
+                <div class="step"><div class="step-num">4</div><div style="flex:1"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.4rem">Extra: LUMIN para Análise Personalizada</div><p style="font-size:0.875rem;color:var(--text-dim);line-height:1.6">Carregue as suas faturas no MyPoupar. O LUMIN identifica padrões de consumo e sugere o momento ideal para mudar.</p><div style="display:flex;gap:0.5rem;margin-top:0.6rem"><span class="badge badge-dim">IA Gratuita</span><span class="badge badge-green">Análise em 3 min</span></div></div></div>
+            </div>
+        </div>
+        <div class="highlight" style="text-align:center">
+            <div style="font-size:0.75rem;color:var(--text-dim);margin-bottom:0.4rem;letter-spacing:0.1em;text-transform:uppercase">Poupança Total Estimada · Família Típica</div>
+            <div class="big-num gold" style="font-size:3rem">€600 – €800<span style="font-size:1.3rem;font-weight:400;color:var(--text-dim)">/ano</span></div>
+            <div style="font-size:0.875rem;color:var(--text-dim);margin-top:0.4rem">Combinando energia + telecom + combustível</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 7 ═══ -->
+<div class="slide" id="slide-7">
+    <div class="slide-inner">
+        <div class="section-label">Torne-se Sócio</div>
+        <h2 class="slide-title">MyPoupar+ Premium</h2>
+        <p class="slide-sub">Acesso exclusivo por apenas 2€/mês — menos de um café</p>
+        <div class="grid-2" style="align-items:start">
+            <div style="display:flex;flex-direction:column;gap:1rem">
+                <div class="card" style="display:flex;gap:1rem;align-items:flex-start"><i class="fas fa-book-open" style="color:var(--gold);font-size:1.2rem;margin-top:2px;flex-shrink:0"></i><div><div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.3rem">Guias Mensais Completos</div><p style="font-size:0.82rem;color:var(--text-dim);line-height:1.5">Análises detalhadas do mercado, novas campanhas e oportunidades de poupança — todos os meses.</p></div></div>
+                <div class="card" style="display:flex;gap:1rem;align-items:flex-start"><i class="fas fa-robot" style="color:var(--gold);font-size:1.2rem;margin-top:2px;flex-shrink:0"></i><div><div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.3rem">LUMIN Avançado 24/7</div><p style="font-size:0.82rem;color:var(--text-dim);line-height:1.5">Upload de faturas ilimitado, análise preditiva de preços e alertas personalizados.</p></div></div>
+                <div class="card" style="display:flex;gap:1rem;align-items:flex-start"><i class="fas fa-gift" style="color:var(--gold);font-size:1.2rem;margin-top:2px;flex-shrink:0"></i><div><div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.3rem">Acesso Antecipado a Campanhas</div><p style="font-size:0.82rem;color:var(--text-dim);line-height:1.5">Seja o primeiro a saber de descontos flash e ofertas negociadas para sócios.</p></div></div>
+                <div class="card" style="display:flex;gap:1rem;align-items:flex-start"><i class="fas fa-file-download" style="color:var(--gold);font-size:1.2rem;margin-top:2px;flex-shrink:0"></i><div><div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.3rem">E-books VIP</div><p style="font-size:0.82rem;color:var(--text-dim);line-height:1.5">Negociar com Operadoras, Eficiência Energética, Maximizar Apps de Desconto.</p></div></div>
+            </div>
+            <div class="sub-card">
+                <div style="text-align:center;margin-bottom:1.5rem">
+                    <div class="big-num gold" style="font-size:3.5rem">2€<span style="font-size:1.25rem;color:var(--text-dim);font-weight:400">/mês</span></div>
+                    <div style="font-size:0.85rem;color:var(--text-dim)">Menos de um café por mês</div>
+                </div>
+                <ul class="check-list" style="margin-bottom:1.5rem">
+                    <li>Sem compromisso de fidelização</li>
+                    <li>Cancela a qualquer momento</li>
+                    <li>100% seguro (SSL / RGPD)</li>
+                    <li>Suporte prioritário</li>
+                </ul>
+                <div style="background:var(--green-dim);border:1px solid rgba(0,200,151,0.25);border-radius:12px;padding:1rem;text-align:center;margin-bottom:1.5rem">
+                    <div style="font-size:0.75rem;color:var(--text-dim);margin-bottom:0.25rem">Retorno do investimento</div>
+                    <div class="big-num green" style="font-size:1.8rem">300×</div>
+                    <div style="font-size:0.75rem;color:var(--text-dim)">Investe 24€/ano · Poupa 600€+</div>
+                </div>
+                <a href="https://buy.stripe.com/00w00j5Zjg2adOMdsh5Rm05" target="_blank" rel="noopener" class="cta-btn pulse" style="width:100%;justify-content:center">
+                    Tornar-me Sócio+ <i class="fas fa-crown"></i>
+                </a>
+                <div style="text-align:center;font-size:0.72rem;color:var(--text-dim);margin-top:0.75rem">Acesso imediato após confirmação de pagamento</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 8 ═══ -->
+<div class="slide" id="slide-8">
+    <div class="slide-inner">
+        <div class="section-label">Calendário</div>
+        <h2 class="slide-title">Campanhas Ativas</h2>
+        <p class="slide-sub">Março 2026 — Estado em tempo real</p>
+        <div class="grid-3" style="margin-bottom:1.25rem">
+            <div class="card card-red" style="padding:1.25rem"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem"><span class="badge badge-red">COMBUSTÍVEL</span><span style="font-size:0.75rem;color:var(--text-dim)">Até 31/12</span></div><div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.4rem">Lidl + Repsol</div><p style="font-size:0.8rem;color:var(--text-dim);margin-bottom:0.75rem">10c€/L + cupões 3€ em compras Lidl.</p><div class="big-num red" style="font-size:1.6rem">0,10€/L</div></div>
+            <div class="card card-gold" style="padding:1.25rem"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem"><span class="badge badge-gold">COMBUSTÍVEL</span><span style="font-size:0.75rem;color:var(--text-dim)">Vigente ●</span></div><div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.4rem">Galp + Continente</div><p style="font-size:0.8rem;color:var(--text-dim);margin-bottom:0.75rem">Até 30c€/L + 10% desconto Continente.</p><div class="big-num gold" style="font-size:1.6rem">0,30€/L</div></div>
+            <div class="card card-green" style="padding:1.25rem"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem"><span class="badge badge-green">COMBUSTÍVEL</span><span style="font-size:0.75rem;color:var(--text-dim)">Vigente ●</span></div><div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.4rem">BP + Pingo Doce</div><p style="font-size:0.8rem;color:var(--text-dim);margin-bottom:0.75rem">20c€/L + 2€ saldo a cada 40€ compras.</p><div class="big-num green" style="font-size:1.6rem">0,20€/L</div></div>
+            <div class="card" style="padding:1.25rem"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem"><span class="badge" style="background:rgba(100,160,255,0.12);color:#64A0FF;border:1px solid rgba(100,160,255,0.3)">ENERGIA</span><span style="font-size:0.75rem;color:var(--text-dim)">Março</span></div><div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.4rem">Endesa Digital</div><p style="font-size:0.8rem;color:var(--text-dim);margin-bottom:0.75rem">Menor kWh do mercado + 27% desconto fatura.</p><div class="big-num" style="font-size:1.6rem;color:#64A0FF">0,1291€/kWh</div></div>
+            <div class="card" style="padding:1.25rem"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem"><span class="badge" style="background:rgba(150,100,255,0.12);color:#9664FF;border:1px solid rgba(150,100,255,0.3)">TELECOM</span><span style="font-size:0.75rem;color:var(--text-dim)">2026</span></div><div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.4rem">DIGI</div><p style="font-size:0.8rem;color:var(--text-dim);margin-bottom:0.75rem">Preços congelados vs aumentos 2,2%.</p><div class="big-num" style="font-size:1.6rem;color:#9664FF">10–29€/mês</div></div>
+            <div class="card" style="padding:1.25rem"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem"><span class="badge" style="background:rgba(255,200,50,0.12);color:#FFC832;border:1px solid rgba(255,200,50,0.3)">FLASH</span><span style="font-size:0.75rem;color:var(--text-dim)">Limitado</span></div><div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.4rem">Iberdrola</div><p style="font-size:0.8rem;color:var(--text-dim);margin-bottom:0.75rem">Oferta adesão até 100€ + 20% desconto permanente.</p><div class="big-num gold" style="font-size:1.6rem">100€ bonus</div></div>
+        </div>
+        <div class="card" style="display:flex;gap:0.75rem;align-items:flex-start;padding:1rem 1.25rem"><i class="fas fa-info-circle" style="color:var(--gold);flex-shrink:0;margin-top:2px"></i><p style="font-size:0.825rem;color:var(--text-dim);line-height:1.5">As campanhas estão sujeitas a alterações. Sócios <strong style="color:var(--text)">MyPoupar+</strong> recebem alertas em tempo real quando surgem novas promoções.</p></div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 9 ═══ -->
+<div class="slide" id="slide-9">
+    <div class="slide-inner">
+        <div class="section-label">Comparador</div>
+        <h2 class="slide-title">Quanto Está a Deixar de Poupar?</h2>
+        <p class="slide-sub">Comparação direta entre o que tem e a melhor opção de 2026</p>
+        <div class="card" style="padding:0;overflow:hidden;margin-bottom:1.5rem">
+            <div style="overflow-x:auto">
+                <table class="data-table">
+                    <thead><tr><th>Serviço</th><th>O que tem (Média)</th><th>Melhor Opção 2026</th><th style="text-align:right">Poupança/Ano</th></tr></thead>
+                    <tbody>
+                        <tr><td><i class="fas fa-bolt" style="color:var(--gold);margin-right:0.5rem"></i><strong>Eletricidade</strong></td><td style="color:var(--text-dim)">EDP / Galp (0,156€/kWh)</td><td style="color:var(--green);font-weight:600">Endesa (0,1291€/kWh)</td><td style="text-align:right"><span class="badge badge-green">+240€</span></td></tr>
+                        <tr><td><i class="fas fa-fire" style="color:#FF7300;margin-right:0.5rem"></i><strong>Gás Natural</strong></td><td style="color:var(--text-dim)">Tarifa standard (30€/mês)</td><td style="color:var(--green);font-weight:600">Galp Regulada (20,30€/mês)</td><td style="text-align:right"><span class="badge badge-green">+116€</span></td></tr>
+                        <tr><td><i class="fas fa-wifi" style="color:#64A0FF;margin-right:0.5rem"></i><strong>Net + TV</strong></td><td style="color:var(--text-dim)">MEO/NOS/Vodafone (45–66€)</td><td style="color:var(--green);font-weight:600">DIGI / Uzo (22€)</td><td style="text-align:right"><span class="badge badge-green">+276–528€</span></td></tr>
+                        <tr><td><i class="fas fa-mobile-alt" style="color:#9664FF;margin-right:0.5rem"></i><strong>Móvel 100GB</strong></td><td style="color:var(--text-dim)">MEO / Vodafone (15€)</td><td style="color:var(--green);font-weight:600">DIGI / Uzo (5–8€)</td><td style="text-align:right"><span class="badge badge-green">+84–120€</span></td></tr>
+                        <tr><td><i class="fas fa-gas-pump" style="color:var(--red);margin-right:0.5rem"></i><strong>Combustível</strong></td><td style="color:var(--text-dim)">Posto sem desconto</td><td style="color:var(--green);font-weight:600">Galp + Continente (30c€/L)</td><td style="text-align:right"><span class="badge badge-green">+360€*</span></td></tr>
+                    </tbody>
+                    <tfoot><tr style="background:rgba(201,168,76,0.06)"><td colspan="3" style="text-align:right;font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;color:var(--gold)">TOTAL ANUAL ESTIMADO</td><td style="text-align:right"><div class="big-num gold" style="font-size:1.4rem">1.076–1.364€</div></td></tr></tfoot>
+                </table>
+            </div>
+            <div style="padding:0.75rem 1rem;border-top:1px solid var(--border);font-size:0.75rem;color:var(--text-dim)">*50L/semana × 52 semanas × 0,30€. Poupança real varia conforme consumo e localização.</div>
+        </div>
+        <div class="grid-3">
+            <div class="card" style="text-align:center;padding:1.5rem"><i class="fas fa-users" style="color:var(--gold);font-size:1.8rem;margin-bottom:0.75rem;display:block"></i><div class="big-num gold" style="font-size:2.2rem">85%</div><div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.3rem">Das famílias pagam mais do que deviam</div></div>
+            <div class="card" style="text-align:center;padding:1.5rem"><i class="fas fa-clock" style="color:var(--gold);font-size:1.8rem;margin-bottom:0.75rem;display:block"></i><div class="big-num gold" style="font-size:2.2rem">3 min</div><div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.3rem">Tempo médio para simular poupança</div></div>
+            <div class="card" style="text-align:center;padding:1.5rem"><i class="fas fa-euro-sign" style="color:var(--green);font-size:1.8rem;margin-bottom:0.75rem;display:block"></i><div class="big-num green" style="font-size:2.2rem">600€</div><div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.3rem">Poupança média anual dos sócios</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 10 ═══ -->
+<div class="slide" id="slide-10">
+    <div class="slide-inner" style="align-items:center;text-align:center">
+        <div style="font-size:3.5rem;margin-bottom:1rem;animation:floatG 4s ease-in-out infinite">🚀</div>
+        <div class="section-label">Call to Action</div>
+        <h2 class="slide-title">Comece a Poupar Hoje</h2>
+        <p class="slide-sub">Não deixe mais dinheiro na mesa. Cada mês de espera custa-lhe dinheiro.</p>
+        <div class="grid-3" style="margin-bottom:2rem;max-width:800px;width:100%">
+            <div class="card" style="text-align:center;padding:1.5rem"><div class="big-num gold" style="font-size:2rem;margin-bottom:0.5rem">1</div><div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.3rem">Visite mypoupar.com</div><div style="font-size:0.8rem;color:var(--text-dim)">Simulador e LUMIN gratuitos</div></div>
+            <div class="card" style="text-align:center;padding:1.5rem"><div class="big-num gold" style="font-size:2rem;margin-bottom:0.5rem">2</div><div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.3rem">Carregue as faturas</div><div style="font-size:0.8rem;color:var(--text-dim)">Análise automática em 3 minutos</div></div>
+            <div class="card" style="text-align:center;padding:1.5rem"><div class="big-num gold" style="font-size:2rem;margin-bottom:0.5rem">3</div><div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.3rem">Mude e poupe</div><div style="font-size:0.8rem;color:var(--text-dim)">Nós tratamos da papelada</div></div>
+        </div>
+        <div class="sub-card" style="max-width:520px;width:100%;margin-bottom:2rem">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;color:var(--gold);margin-bottom:1.25rem">Torne-se Sócio+ e Desbloqueie</div>
+            <ul class="check-list" style="text-align:left;margin-bottom:1.5rem">
+                <li>Guias mensais exclusivos (como este)</li>
+                <li>Alertas de campanhas em tempo real</li>
+                <li>E-books VIP e dicas avançadas</li>
+                <li>Suporte prioritário do LUMIN</li>
+            </ul>
+            <div style="font-size:0.8rem;color:var(--text-dim);margin-bottom:0.75rem">Sem compromisso · Cancela quando quiser</div>
+            <div class="big-num gold" style="font-size:2.2rem;margin-bottom:1.25rem">2€<span style="font-size:1rem;color:var(--text-dim);font-weight:400">/mês</span></div>
+            <a href="https://buy.stripe.com/00w00j5Zjg2adOMdsh5Rm05" target="_blank" rel="noopener" class="cta-btn pulse" style="width:100%;justify-content:center">
+                Aderir ao Sócio+ <i class="fas fa-crown"></i>
+            </a>
+        </div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--gold);margin-bottom:1rem">MyPoupar.com</div>
+        <div style="display:flex;gap:1.25rem;justify-content:center;font-size:1.5rem;color:var(--text-dim)">
+            <i class="fab fa-facebook" style="cursor:pointer;transition:color 0.2s" onmouseenter="this.style.color='#1877F2'" onmouseleave="this.style.color='var(--text-dim)'"></i>
+            <i class="fab fa-instagram" style="cursor:pointer;transition:color 0.2s" onmouseenter="this.style.color='#E4405F'" onmouseleave="this.style.color='var(--text-dim)'"></i>
+            <i class="fab fa-linkedin" style="cursor:pointer;transition:color 0.2s" onmouseenter="this.style.color='#0A66C2'" onmouseleave="this.style.color='var(--text-dim)'"></i>
+            <i class="fas fa-envelope" style="cursor:pointer;transition:color 0.2s" onmouseenter="this.style.color='var(--gold)'" onmouseleave="this.style.color='var(--text-dim)'"></i>
+        </div>
+        <div style="margin-top:1.5rem;font-size:0.72rem;color:var(--text-dim)">© 2026 MyPoupar. Todos os direitos reservados. Informações sujeitas a alteração sem aviso prévio.</div>
+    </div>
+</div>
+
+<script>
+    const TOTAL = 10;
+    let current = 1;
+    let isAnimating = false;
+    let touchStartX = 0, touchStartY = 0;
+
+    const dotsRow = document.getElementById('dots-row');
+    for (let i = 1; i <= TOTAL; i++) {
+        const d = document.createElement('button');
+        d.className = 'dot' + (i === 1 ? ' active' : '');
+        d.id = 'dot-' + i;
+        d.title = 'Slide ' + i;
+        d.onclick = () => goToSlide(i);
+        dotsRow.appendChild(d);
+    }
+
+    function updateUI() {
+        document.getElementById('progress').style.width = (current / TOTAL * 100) + '%';
+        document.getElementById('current-num').textContent = current;
+        document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i+1 === current));
+        document.getElementById('btn-prev').classList.toggle('hidden', current === 1);
+        document.getElementById('btn-next').classList.toggle('hidden', current === TOTAL);
+    }
+
+    function goToSlide(n) {
+        if (isAnimating || n < 1 || n > TOTAL || n === current) return;
+        isAnimating = true;
+        document.getElementById('slide-' + current).style.display = 'none';
+        const next = document.getElementById('slide-' + n);
+        next.classList.add('active');
+        next.style.display = 'block';
+        next.scrollTop = 0;
+        current = n;
+        updateUI();
+        setTimeout(() => { isAnimating = false; }, 500);
+    }
+
+    function nextSlide() { goToSlide(current + 1); }
+    function prevSlide() { goToSlide(current - 1); }
+
+    document.addEventListener('keydown', e => {
+        if (['ArrowRight','ArrowDown',' '].includes(e.key)) { e.preventDefault(); nextSlide(); }
+        if (['ArrowLeft','ArrowUp'].includes(e.key)) { e.preventDefault(); prevSlide(); }
+        if (e.key==='f'||e.key==='F') toggleFullscreen();
+        if (e.key==='Home') goToSlide(1);
+        if (e.key==='End') goToSlide(TOTAL);
+    });
+
+    document.addEventListener('touchstart', e => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    }, {passive:true});
+
+    document.addEventListener('touchend', e => {
+        const dx = touchStartX - e.changedTouches[0].clientX;
+        const dy = Math.abs(touchStartY - e.changedTouches[0].clientY);
+        if (Math.abs(dx) > 50 && dy < 80) { dx > 0 ? nextSlide() : prevSlide(); }
+    }, {passive:true});
+
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(()=>{});
+            document.getElementById('fs-icon').className = 'fas fa-compress';
+        } else {
+            document.exitFullscreen();
+            document.getElementById('fs-icon').className = 'fas fa-expand';
+        }
+    }
+    document.addEventListener('fullscreenchange', () => {
+        document.getElementById('fs-icon').className = document.fullscreenElement ? 'fas fa-compress' : 'fas fa-expand';
+    });
+
+    updateUI();
+</script>
+</body>
+</html>
